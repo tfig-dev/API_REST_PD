@@ -35,12 +35,6 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
             }
         }
 
-//        if (username.equals("admin") && password.equals("admin")) {
-//            List<GrantedAuthority> authorities = new ArrayList<>();
-//            authorities.add(new SimpleGrantedAuthority("ADMIN"));
-//            return new UsernamePasswordAuthenticationToken(username, password, authorities);
-//        }
-
         return null;
     }
 
