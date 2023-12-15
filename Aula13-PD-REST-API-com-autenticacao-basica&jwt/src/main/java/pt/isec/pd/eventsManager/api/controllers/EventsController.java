@@ -1,6 +1,5 @@
 package pt.isec.pd.eventsManager.api.controllers;
 
-import org.apache.coyote.Response;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import pt.isec.pd.eventsManager.api.models.Event;
 import pt.isec.pd.eventsManager.api.repository.Data;
 
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("events")
@@ -33,7 +32,7 @@ public class EventsController {
         if (Data.getInstance().checkIfEventExistsByAll(event))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Evento já existe.");
 
-        return Data.getInstance().createEvent_v3(event)
+        return Data.getInstance().createEvent(event)
                 ? ResponseEntity.status(HttpStatus.CREATED).body(event + "\nEvento criado com sucesso.")
                 : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao criar evento.");
     }
@@ -82,6 +81,30 @@ public class EventsController {
         return ResponseEntity.status(HttpStatus.OK).body(events);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity generateCode(
+            Authentication authentication,
+            @PathVariable("id") Integer id,
+            @RequestBody Map<String, Integer> RequestBody) {
+
+        Integer timeout = RequestBody.get("timeout");
+
+        if (!authentication.getAuthorities().toString().contains("ADMIN"))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Utilizador sem permissões de Administrador.");
+
+        if (!Data.getInstance().checkIfEventExists(id))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("O evento não existe.");
+
+        if (timeout <= 0)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao gerar código - Parametros necessários em falta.");
+
+        String generatedCode = Data.getInstance().generateCode();
+        if (Data.getInstance().updateCode(id, timeout, generatedCode))
+            return ResponseEntity.status(HttpStatus.OK).body(Data.getInstance().getEventById(id) + "\nCódigo gerado com sucesso: " + generatedCode);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro a gerar código na base de dados.");
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity deleteEvent(
             Authentication authentication,
@@ -96,11 +119,12 @@ public class EventsController {
         if (Data.getInstance().checkIfEventCanBeEdited(id))
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O evento não pode ser eliminado porque já tem presenças registadas.");
 
-        Event event = Data.getInstance().deleteEvent_v2(id);
+        Event event = Data.getInstance().deleteEvent(id);
 
         if (event == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro da base de dados ao eliminar evento.");
 
         return ResponseEntity.status(HttpStatus.OK).body(event + "\nEvento eliminado com sucesso.");
     }
+
 }
