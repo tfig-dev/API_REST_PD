@@ -236,7 +236,7 @@ public class TerminalManager {
                                     break;
                                 }
 
-                                Data.sendRequestAndShowResponse(API_LINK + EVENTS + "/" + idEvent, "GET", "bearer " + tokenUser, null);
+                                Data.sendRequestAndShowResponse(API_LINK + EVENTS + "/" + idEvent2, "GET", "bearer " + tokenUser, null);
                                 break;
                             case "3":
                                 pout.println("Nome do evento: ");
@@ -308,7 +308,7 @@ public class TerminalManager {
                         break;
                     }
 
-                    Data.sendRequestAndShowResponse(API_LINK + ATTENDANCES + "/" + idEvent2, "GET", "bearer " + tokenUser, null);
+                    Data.sendRequestAndShowResponse(API_LINK + ATTENDANCES + "/" + idEvent3, "GET", "bearer " + tokenUser, null);
 
                     break;
                 case "5":
@@ -330,7 +330,7 @@ public class TerminalManager {
                     }
 
                     String insertCodeBody = "{\"timeout\":" + validity + "}";
-                    Data.sendRequestAndShowResponse(API_LINK + EVENTS + "/" + idEvent3, "PUT", "bearer " + tokenUser, insertCodeBody);
+                    Data.sendRequestAndShowResponse(API_LINK + EVENTS + "/" + idEvent4, "PUT", "bearer " + tokenUser, insertCodeBody);
 
                     break;
                 case "6":

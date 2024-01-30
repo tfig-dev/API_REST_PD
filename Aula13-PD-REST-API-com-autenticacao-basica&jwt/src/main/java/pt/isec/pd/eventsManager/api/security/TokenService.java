@@ -30,7 +30,7 @@ public class TokenService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("pt.isec.pd2023")
                 .issuedAt(now)
-                .expiresAt(now.plus(5, ChronoUnit.MINUTES))
+                .expiresAt(now.plus(10, ChronoUnit.SECONDS))
                 .subject(authentication.getName())
                 .claim("scope", scope)
                 .build();

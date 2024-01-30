@@ -82,7 +82,7 @@ public class UserTerminal {
             String tokenUser = sendRequestAndShowResponse(login, "GET", "basic " + encodedString, null);
             System.out.println("Token do user: " + tokenUser);
 
-            String tokenAttendances = sendRequestAndShowResponse(attendances,"GET", "bearer " + tokenUser, null);
+            String tokenAttendances = sendRequestAndShowResponse(attendances,"PATCH", "bearer " + tokenUser, null);
 
             String tokenAttendancesNAME = sendRequestAndShowResponse(attendances + "?name=leitoes","GET", "bearer " + tokenUser, null);
 

@@ -32,6 +32,8 @@ public class AttendancesController {
         if (!authentication.getAuthorities().toString().contains("ADMIN"))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Utilizador sem permissões de Administrador.");
 
+        System.out.println(id);
+
         try {
             idInt = Integer.parseInt(id);
         } catch (NumberFormatException e) {
